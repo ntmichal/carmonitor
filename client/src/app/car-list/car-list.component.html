@@ -1,0 +1,275 @@
+<style>
+
+  #car-container{
+    color: #D1DBBD;
+    background-color: #193441;
+    width: 100%;
+    align-items: center;
+  }
+  #car-container .first{
+    display: block; 
+    position: relative;
+    width: 464px;
+    margin: 0 auto;
+    padding: 0;
+    list-style: none;
+    text-transform: uppercase;
+  }
+  #car-container .first li{
+ 
+    font-size: 20px;
+    position: relative;
+    display: inline-block;
+    background-color: #3E606F;
+    margin: 2px;
+    line-height: 40px;
+    height: 40px;
+    width: 150px;
+    text-align: center;
+    
+  }
+  #car-container .second{
+    /* display: inline-block; */
+    padding: 0;
+    margin: 0;
+  }
+  #car-container .second li{
+    display: inline-block;
+    background-color: #3E606F;
+    margin: 1px;
+    width: 80px;
+    height: 100%;
+    text-align: center;
+  }
+  .delete-btn{
+    height: 100%;
+    border: none;
+    background-color: rgb(75, 118, 136);
+    text-transform: uppercase;
+    color: #D1DBBD;
+    width: 100%; 
+    font-size: 1em;
+  }
+  .delete-btn:hover{
+    cursor: pointer;
+    background-color: rgb(46, 71, 82);
+    height: 100%;
+  }
+
+  .insert-car{
+    display: block;
+
+  }
+  .insert-car ul{
+    font-size: 1.1em;
+  }
+  .insert-car ul li{
+    display: inline-block;
+    font-size: 1.1em;
+    height: 26px;
+  }
+
+  .details{
+    display: block;
+    position: relative;
+    margin: 0 auto;
+    width: 799px; 
+    min-height: 200px;
+    background-color: #3E606F;
+  
+  }
+  .details .one{
+    margin-left: 5px;
+    width: 300px;
+    float: left;
+    /* height: 250px; */
+  }
+  .details .two{
+     margin-left: 305px; 
+    /* height: 200px; */
+  }
+  .detailsList{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    width: 100%;
+
+
+  }
+  .dropdown{
+    width: 200px;
+    margin: 0 auto;
+  }
+  .btn-dropdown{
+    background-color: #3E606F;
+    color:#D1DBBD;
+    border-radius: 0;
+  }
+  .btn-dropdown:hover{
+    background-color: rgb(73, 114, 131);
+  }
+  .main{
+    background-color: #193441;
+  }
+  .form{
+    width: 80px;
+  }
+  .car-form{
+    background-color: #193441;
+  }
+  .car-form .form-control{
+    background-color: #3E606F;
+    border-radius: 0px;
+    border-color: #122630;
+    color:  #D1DBBD;
+    text-align: center;
+    width: 350px;
+    margin: 0 auto;
+  }
+  .car-form .car-form-btn{
+    display: block;
+    margin: 0 auto;
+    cursor: pointer;
+  }
+  .car-form .car-form-btn:hover{
+    border-color: #D1DBBD;
+  }
+</style>
+
+  <!-- chose car -->
+<div class="main">
+  <div class="dropdown">
+    <button class="btn btn-dropdown dropdown-toggle" 
+        type="button" id="dropdownMenuButton" 
+        data-toggle="dropdown" 
+        aria-haspopup="true" 
+        aria-expanded="false">
+      Chose car
+    </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+      <a class="dropdown-item" 
+          href="#" 
+          *ngFor="let car of carsList"
+          (click)="showCar(car.id)"
+          >
+          {{car.mark}} {{car.model}}
+        </a>
+    </div>
+    <button class="btn btn-dropdown" 
+        type="button"
+        (click)="addCarForm()"
+        >
+      Add car
+    </button>
+  </div>
+
+<div>
+  <div *ngFor="let car of this.carsList; let i = index">
+    <div id="car-container" [hidden]="this.showList[i]">
+      <!-- content inside -->
+
+      <ul class="first">
+          <li>{{car.mark}}</li>
+          <li>{{car.model}}</li>
+          <li><button class="delete-btn" (click)="deleteCar(car)">delete</button></li>
+      </ul>
+      <div class="details">
+          <div class="one">
+              <ul class="detailsList">
+                <li>Rok produkcji: {{car.productionYear}}</li>
+                <li>Typ silnika: {{car.engineType}}</li>
+                <li>Pojemność:</li>
+                <li>HP: {{car.km}}</li>
+                 <li>Średnie spalanie: {{car.statistic.avarageFuelUsage}} </li>
+                <li>Koszta podróży: {{car.statistic.totalCost}}</li>
+                <li>Przebieg: {{car.statistic.kmTraveled}}</li> 
+              </ul>
+              
+            </div>
+            <div class="two">
+                <ul class="second">
+                  <li>Price</li>
+                  <li>Liters</li>
+                  <li>Kilometers</li>
+                  <li>Date</li>
+                </ul>
+                <ul class="second" *ngFor="let item of car.fuelingList">
+                    <li>{{item.literPrice}}</li>
+                    <li>{{item.numberOfLiters}}</li>
+                    <li>{{item.kilometersTraveled}}</li>
+                    <li>{{item.fuelDate}}</li>
+                    <li><button class="delete-btn" (click)="deleteFueling(item,car.id)">delete</button></li>
+                    <li><button class="delete-btn">edit</button></li>
+                </ul>
+                <ul class="second">
+                  <form (ngSubmit)="addFueling(car.id, f11.value, f12.value, f13.value, f14.value)" >
+                      <div class="form-group">
+                        <li><input type="text" class="form" #f11>
+                        </li>
+                        <li>
+                            <input type="text" class="form" #f12>
+                        </li>
+                        <li>             
+                            <input type="text" class="form" #f13>
+                        </li>
+                        <li>
+                            <input type="text" class="form" #f14>
+                        </li>
+                        <li>
+                            <button type="submit" class="delete-btn">Submit</button>
+                        </li>
+          
+                      </div>
+                  </form>
+                </ul>
+            </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+
+  <div class="car-form" [hidden]="this.form"> 
+    <form (ngSubmit)="addCar()" #carForm="ngForm">
+
+              
+          <input type="text" class="form-control" id="mark"
+          required
+          [(ngModel)]="car.mark" name="mark" #name="ngModel"  placeholder="MARK">
+        
+  
+            <input type="text" class="form-control" id="model"
+            required
+            [(ngModel)]="car.model" name="model" #name="ngModel" placeholder="MODEL">                 
+   
+  
+            <input type="number" class="form-control" id="KM"
+            required
+            [(ngModel)]="car.km" name="KM" #name="ngModel" placeholder="HP"> 
+   
+    
+            <input type="text" class="form-control" id="engineType"
+            required
+            [(ngModel)]="car.engineType" name="engineType" #name="ngModel" placeholder="ENGINE TYPE">  
+   
+    
+          <input type="text" class="form-control" id="fuelType"
+            required
+            [(ngModel)]="car.fuelType" name="fuelType" #name="ngModel" placeholder="FUEL TYPE">
+
+   
+          <input type="text" class="form-control" id="productionYear"
+            required
+            [(ngModel)]="car.productionYear" name="productionYear" #name="ngModel" placeholder="PRODUCTION YEAR">
+ 
+              <button [disabled]="!carForm.form.valid" 
+              type="submit" 
+              class="btn form-control car-form-btn">
+              Submit
+            </button>
+  
+    </form>
+
+  </div>
