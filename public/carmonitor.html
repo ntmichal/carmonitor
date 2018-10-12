@@ -1,0 +1,198 @@
+<!DOCTYPE <!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script
+    src="https://code.jquery.com/jquery-3.3.1.js"
+    integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+    crossorigin="anonymous"></script>
+    <style>
+        body{
+            margin: 0;
+            height: 100%;
+        }
+
+
+        .btn-carmonitor{
+            display: block;
+            width: 150px;
+            line-height: 60px;
+            height: 60px;
+            border: none;
+            cursor: pointer;
+            background-color: beige;
+            text-align: center;
+            text-decoration: none;
+            color: black;
+        }
+        #cars{
+            font-family: Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+        
+        #cars td, #cars th{
+            border: 1px solid;
+            padding: 12px;
+        }
+
+        button:hover{
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="main-container">
+            <table id="cars">
+                <tr>
+                    <th>mark</th>
+                    <th>model</th>
+                    <th>Engine power (HP)</th>
+                    <th>Engine power (KW)</th>
+                    <th>engine type</th>
+                    <th>fuel type</th>
+                    <th>production year</th>
+                    <th>action</th>
+                </tr>
+            </table>
+
+        </div>
+    </div>
+ <script>
+
+
+ findAllCars();
+
+ function findAllCars(){
+     $.ajax({
+        type: "GET",
+        url: "http://localhost:8080/api/car",
+        contentType: 'application/json',
+		dataType: 'json',
+        success: (data)=>{
+             console.log(data);
+             fillTable(data);
+         },
+        error: (error) =>{
+             alert("error");
+
+        }
+     })
+ }
+
+ function fillTable(data){
+
+    var elementTable = document.getElementById('cars');
+    data.forEach(element =>{
+        var elementRow = document.createElement("tr");
+        var markTD = document.createElement("td");
+        var modelTD = document.createElement("td");
+        var kmTD = document.createElement("td");
+        var kwTD = document.createElement("td");
+        var engineTypeTD = document.createElement("td");
+        var fuelTypeTD = document.createElement("td");
+        var productionYearTD = document.createElement("td");
+        var idTD = document.createElement("td");
+      
+        var textNode1 = document.createTextNode(element.mark);
+        var textNode2 = document.createTextNode(element.model);
+        var textNode3 = document.createTextNode(element.km);
+        var textNode4 = document.createTextNode(element.kw);
+        var textNode5 = document.createTextNode(element.engineType);
+        var textNode6 = document.createTextNode(element.fuelType);
+        var textNode7 = document.createTextNode(element.productionYear);
+
+
+        var buttonChild = document.createElement("button");
+
+        var textChild = document.createTextNode("Delete");
+        buttonChild.appendChild(textChild);
+        //.createTextNode('<button onClick="del('+element.id+')">Delete</button>');
+
+        markTD.appendChild(textNode1);
+        modelTD.appendChild(textNode2);
+         kmTD.appendChild(textNode3);
+         kwTD.appendChild(textNode4);
+         engineTypeTD.appendChild(textNode5);
+         fuelTypeTD.appendChild(textNode6);
+         productionYearTD.appendChild(textNode7);
+         idTD.appendChild(buttonChild);
+           
+        elementRow.appendChild(markTD);
+        elementRow.appendChild(modelTD);
+        elementRow.appendChild(kmTD);
+        elementRow.appendChild(kwTD);
+        elementRow.appendChild(engineTypeTD);
+        elementRow.appendChild(fuelTypeTD);
+        elementRow.appendChild(productionYearTD);
+        elementRow.appendChild(idTD);
+
+        elementTable.appendChild(elementRow);
+    });
+
+
+/*
+cTR.appendChild(cTD);
+elementTable.appendChild(cTR);
+
+ 
+        data.forEach(element => {
+         $('#cars').append('<tr id='+element.id+'RowX"> \
+         <td>'+element.mark+'</td>\
+         <td>'+element.model+'</td>\
+         <td>'+element.km+'</td>\
+         <td>'+element.kw+'</td>\
+         <td>'+element.engineType+'</td>\
+         <td>'+element.fuelType+'</td>\
+         <td>'+element.productionYear+'</td>\
+         <td><button onClick="del('+element.id+')">Delete</button></td>\
+         </tr>');
+     }); 
+        data.forEach(element =>{
+
+        }); -->
+        */
+
+ }
+
+function del(data){
+    var delo =  confirm("Are you sure ?");
+    console.log(data);
+    if(delo == true){
+        deleteById(data);
+    }
+
+}
+
+function deleteById(id){
+    $.ajax({
+        type: "DELETE",
+        url: "http://localhost:8080/api/car/"+id,
+        contentType: 'application/json',
+		dataType: 'json',
+        success: ()=>{
+           findAllCars();
+         },
+        error: (error) =>{
+
+
+        }
+     })
+     deleteRow('7RowX');
+    // findAllCars();
+}
+
+function deleteRow(rowid)  
+{   
+    var row = document.getElementById(rowid);
+    row.parentNode.removeChild(row);
+}
+
+
+ </script>
+</body>
+</html>
